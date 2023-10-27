@@ -2,8 +2,9 @@
 # exit on error
 set -o errexit
 
+python3 -m pip install --upgrade pip
 pip install -r requirements.txt
 
-python manage.py collectstatic --no-input
-python manage.py migrate
-python manage.py superuser
+python3 manage.py collectstatic --no-input
+python3 manage.py migrate
+python3 manage.py superuser
