@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container m-4">
+    <h1>{{user.first_name}} さんのマイページ</h1>
+    <div class="card text-center p-4 border border-primary border-5">
+        <p class="border-bottom my-4 h4 border-success border-2">アカウント名: {{ user.account_id }}</p>
+        <p class="border-bottom my-4 h4 border-success border-2">ユーザー名: {{ user.first_name }}</p>
+        <p class="border-bottom my-4 h4 border-success border-2">メールアドレス: {{ user.email }}</p>
+        <p class="border-bottom my-4 h4 border-success border-2">誕生日: {{ user.birth_date }}</p>
+    </div>
+</div>
+
+<h2>投稿した記事</h2>
+<div class="container">
+    <div class="row">
+        {% for article in user_articles %}
+        <div class="col-md-4 col-sm-6 col-xs-12 pb-3 ">
+            <div class="card">
+                <a href='{% url "app:detail" article.pk %}'><img alt="{{ article.title }}" src="{{ article.image.medium.url }}"/ class="pt-2"></a>
+                <div class="card-body">
+                    <h5 class="card-title">{{ article.title }}</h5>
+                    <p class="card-text">{{ article.description | linebreaksbr }}</p>
+                    <p class="card-text">作成者: {{ article.author }}</p>
+                    <p class="card-text">作成日時: {{ article.created_at|date:"Y-m-j" }}</p>
+                </div>
+                <div class="m-4">
+                    <div class='btn btn-primary'><a href="{% url 'app:edit_article' article.id %}" class="text-white">編集</a></div>
+                    <div class='btn btn-danger ml-5'><a href="{% url 'app:delete_article' article.id %}" class="text-white">削除</a></div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="mt-4">投稿した記事はありません。</p>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
+
+

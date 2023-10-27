@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<br/>
+<div class="h1">ログイン</div>
+{% endblock %}
+{% block content %}
+<div class=" d-flex justify-content-center">
+    <div class="card p-4 bg-success text-white" style="max-width: 48rem;">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            {% for field in form %}
+            {{ field.label }} :
+            {{ field }}
+            <br/>
+            {{ field.errors }}
+            <br>
+            {% endfor %}
+            <div class="mt-3">
+                <button type="submit" class="btn btn-primary">ログイン</button>
+                <a href="{% url 'app:hello' %}" class="btn btn-secondary">戻る</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="container d-flex justify-content-center">
+    <form action="" method="POST" enctype="multipart/form-data">
+        <br/>
+        {{ form.title.label}}
+        {% render_field form.title class+="form-control form-control-lg mb-4" placeholder="タイトル" %} 
+
+        {{ form.description.label}}
+        {% render_field form.description class+="form-control form-control-sm mb-4" placeholder="簡単な説明文（50文字）"%}
+
+        {{ form.ingredients.label}}
+        {% render_field form.ingredients class+="form-control form-control-sm mb-4" placeholder="【材料】"%}
+
+        {{ form.content.label}}
+        {% render_field form.content class+="form-control form-control-sm mb-4" placeholder="【調理手順】"%}
+
+
+        {{ form.image.label}}
+        {% render_field form.image class+="form-control mb-4" %}
+
+        {{ form.author.label }}
+        {% render_field form.author class+="form-control mb-4" %}
+
+
+        <button type="submit" class="btn btn-primary">送信</button>
+        {% csrf_token %}
+    </form>
+</div>
+
+{% endblock content %}

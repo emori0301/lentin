@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2 class="mt-4">記事を削除しますか？</h2>
+  <p>以下の記事を削除しますか？</p>
+
+  <h1 class="mt-3 mb-4 bg-warning bg-gradient text-secondary">{{ article.title }}</h1>
+    <a href="{{ article.image.url }}"><img alt="{{ article.title }}" src="{{ article.image.large.url }}"/></a><br/>
+    <div>
+        <p class="card m-4 p-4">{{ article.description  | linebreaksbr }}</p>
+        <p class="card m-4 p-4">{{ article.ingredients  | linebreaksbr }}</p>
+        <p class="card m-4 p-4">{{ article.content  | linebreaksbr }}</p>
+        <p class="card m-4 p-4">投稿者：{{ article.author }}</p>
+        <p class="card m-4 p-4">投稿日：{{ article.created_at|date:"Y-m-j" }}<br>
+        最終更新日：{{ article.updated_at|date:"Y-m-j" }}</p>
+    </div>
+  {% comment %} <h3>{{ article.title }}</h3>
+  <p>{{ article.content }}</p> {% endcomment %}
+
+  <form action="{% url 'app:delete_article' article_id=article.id %}" method="POST">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">削除</button>
+  </form>
+  <a href="{% url 'app:my_page' %}" class="btn btn-secondary">キャンセル</a>
+{% endblock %}

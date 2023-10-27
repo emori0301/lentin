@@ -32,6 +32,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app',
+    'widget_tweaks',
+    'stdimage',
 ]
 
 MIDDLEWARE = [
@@ -47,10 +49,15 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'mysite.urls'
 
+AUTH_USER_MODEL = "app.User" # カスタムユーザーを認証用ユーザーとして登録
+
+LOGIN_REDIRECT_URL = "app:hello"
+LOGOUT_REDIRECT_URL = "app:hello"
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -106,12 +113,18 @@ USE_I18N = True
 
 USE_TZ = True
 
+MEDIA_URL = '/media/'
+if DEBUG:
+    MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
+else:
+    MEDIA_ROOT = f'/var/www/{BASE_DIR.name}/media'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
 STATIC_ROOT = str(BASE_DIR / "staticfiles")
+STATICFILES_DIRS = [BASE_DIR / 'static']
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Default primary key field type

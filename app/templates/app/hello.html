@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+<div class="container">
+    {% if user.is_authenticated %}
+    <br/>
+    {% else %}
+    <br/><br/>
+    <div class="h1">ようこそ、LENTINへ</div><br/>
+    <p>
+        ご覧いただきありがとうございます。<br/><br/>
+        この「 <span class="text-danger h2">LENTIN</span> 」は仕事が忙しく、自炊はしたいけどなかなかできない。<br/><br/>
+        そんな人の為の <span class="text-success h2 fw-bold">電子レンジで簡単に作れる料理を集めた掲示板アプリ</span> です。<br/><br/>
+        私は、毎朝6時に起きて、朝食・お弁当を作っていますが、大体30〜40分くらい時間がかかります。<br/><br/>
+        作り置きもありますが、どうしてもこれくらいの時間はかかってしまいます。<br/><br/>
+        少しでも楽をする為に、時間を有効活用する為に、そう考えてこのアプリを作りました。
+    </p><br/>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<div class=" d-flex justify-content-center">
+    <div class="card h2 p-4 border border-success" style="max-width: 36rem;">
+        <div class="">ようこそ {{ user.first_name }} さん</div>
+        <br/>
+        <div><a href="{% url 'app:home' %}" class="btn btn-warning">ホームへ</a></div>
+    </div>
+</div>
+
+
+{% else %}
+<div class="d-flex justify-content-center">
+    <div class="m-2">
+        <a href="{% url 'app:signup' %}" class="btn btn-primary">新規登録</a>
+    </div>
+    <div class="m-2">
+        <a href="{% url 'app:login' %}" class="btn btn-danger">ログイン</a>
+    </div>
+    <div class="m-2">
+        <a href="{% url 'app:home' %}" class="btn btn-warning">ゲストユーザーで見る</a>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

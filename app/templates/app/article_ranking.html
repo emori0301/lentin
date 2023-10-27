@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 class="m-5">検索結果</h1>
+
+<div class="container">
+    <div class="row">
+        {% for article in articles %}
+        <div class="col-md-4 col-sm-6 col-xs-12 pb-3 ">
+            <div class="card">
+                <a href='{% url "app:detail" article.pk %}'><img alt="{{ article.title }}" src="{{ article.image.medium.url }}"/ class="pt-2"></a>
+                <div class="card-body">
+                    <h5 class="card-title">{{ article.title }}</h5>
+                    <p class="card-text">{{ article.description | linebreaksbr }}</p>
+                    <p class="card-text">作成者: {{ article.author }}</p>
+                    <p class="card-text">作成日時: {{ article.created_at|date:"Y-m-j" }}</p>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <h2>該当する記事はありません。</h2>
+        {% endfor %}
+        {% include 'simple_pagination.html' %}
+    </div>
+</div>
+
+{% endblock %}
