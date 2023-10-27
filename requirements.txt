@@ -6,5 +6,5 @@ django-environ
 gunicorn
 psycopg2-binary
 whitenoise
-widget_tweaks
+widget_tweaks==23.3.1
 stdimage==23.3.1
