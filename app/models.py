@@ -38,7 +38,6 @@ class UserManager(BaseUserManager):
             **extra_fields,
         )
 
-
 class User(AbstractBaseUser, PermissionsMixin):
     account_id = models.CharField(
         verbose_name=_("ユーザーID"),
@@ -77,7 +76,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         auto_now_add=True
     )
     updated_at = models.DateTimeField(
-        verbose_name=_("updateded_at"),
+        verbose_name=_("updated_at"),
         auto_now=True
     )
 
@@ -126,19 +125,5 @@ class Comment(models.Model):
     content = models.TextField('内容')
     created_at = models.DateTimeField(auto_now_add=True)
 
-
-# 記事へのいいねモデル
-class LikeForArticle(models.Model):
-    """投稿に対するいいね"""
-    target = models.ForeignKey(Article, on_delete=models.CASCADE, null=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    timestamp = models.DateTimeField(default=timezone.now)
-
-# コメントへのいいねモデル
-class LikeForComment(models.Model):
-    """コメントに対するいいね"""
-    target = models.ForeignKey(Comment, on_delete=models.CASCADE)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(default=timezone.now)
 
 

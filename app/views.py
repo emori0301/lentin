@@ -11,12 +11,12 @@ from .forms import SignUpForm, LoginFrom, ArticleCreateForm, CommentForm
 from django.http import HttpResponseForbidden
 from .forms import ArticleCreateForm
 from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
-from .models import Article, Comment, LikeForArticle, LikeForComment, Rating
+from .models import Article, Comment, Rating
 from django.views import generic
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 #==========================================
-
+filter
 # ようこそページへの遷移
 class IndexView(TemplateView):
     template_name = "app/hello.html"
@@ -124,22 +124,22 @@ class ArticleList(generic.ListView):
     model = Article
     paginate_by = 6
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        # {'pk':{'count':ポストに対するイイネ数,'is_user_liked_for_article':bool},}という辞書を追加していく
-        d = {}
-        for article in self.object_list:
-            # articleに対するイイね数
-            like_for_article_count = article.likeforarticle_set.count()
-            # ログイン中のユーザーがイイねしているかどうか
-            is_user_liked_for_article = False
-            if not self.request.user.is_anonymous:
-                if article.likeforarticle_set.filter(user=self.request.user).exists():
-                    is_user_liked_for_article = True
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     # {'pk':{'count':ポストに対するイイネ数,'is_user_liked_for_article':bool},}という辞書を追加していく
+    #     d = {}
+    #     for article in self.object_list:
+    #         # articleに対するイイね数
+    #         like_for_article_count = article.likeforarticle_set.count()
+    #         # ログイン中のユーザーがイイねしているかどうか
+    #         is_user_liked_for_article = False
+    #         if not self.request.user.is_anonymous:
+    #             if article.likeforarticle_set.filter(user=self.request.user).exists():
+    #                 is_user_liked_for_article = True
 
-            d[article.pk] = {'count': like_for_article_count, 'is_user_liked_for_article': is_user_liked_for_article}
-        context['article_like_data'] = d
-        return context
+    #         d[article.pk] = {'count': like_for_article_count, 'is_user_liked_for_article': is_user_liked_for_article}
+    #     context['article_like_data'] = d
+    #     return context
 
 # ===================================================================
 
@@ -147,73 +147,73 @@ class ArticleDetail(generic.DetailView):
     template_name = 'app/article_detail.html'
     model = Article
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        like_for_article_count = self.object.likeforarticle_set.count()
-        # ポストに対するイイね数
-        context['like_for_article_count'] = like_for_article_count
-        # ログイン中のユーザーがイイねしているかどうか
-        is_user_liked_for_article = False
-        if not self.request.user.is_anonymous:
-            if self.object.likeforarticle_set.filter(user=self.request.user).exists():
-                is_user_liked_for_article = True
-        context['is_user_liked_for_article'] = is_user_liked_for_article
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     like_for_article_count = self.object.likeforarticle_set.count()
+    #     # ポストに対するイイね数
+    #     context['like_for_article_count'] = like_for_article_count
+    #     # ログイン中のユーザーがイイねしているかどうか
+    #     is_user_liked_for_article = False
+    #     if not self.request.user.is_anonymous:
+    #         if self.object.likeforarticle_set.filter(user=self.request.user).exists():
+    #             is_user_liked_for_article = True
+    #     context['is_user_liked_for_article'] = is_user_liked_for_article
 
-        # {'pk':{'count':コメントに対するイイネ数,'is_user_like_for_comment':bool},}という辞書を追加していく
-        d = {}
-        for comment in self.object.comment_set.all():
-            like_for_comment_count = comment.likeforcomment_set.count()
-            is_user_liked_for_comment = False
-            if not self.request.user.is_anonymous:
-                if comment.likeforcomment_set.filter(user=self.request.user).exists():
-                    is_user_liked_for_comment = True
-            d[comment.pk] = {'count': like_for_comment_count, 'is_user_liked_for_comment': is_user_liked_for_comment}
+    #     # {'pk':{'count':コメントに対するイイネ数,'is_user_like_for_comment':bool},}という辞書を追加していく
+    #     d = {}
+    #     for comment in self.object.comment_set.all():
+    #         like_for_comment_count = comment.likeforcomment_set.count()
+    #         is_user_liked_for_comment = False
+    #         if not self.request.user.is_anonymous:
+    #             if comment.likeforcomment_set.filter(user=self.request.user).exists():
+    #                 is_user_liked_for_comment = True
+    #         d[comment.pk] = {'count': like_for_comment_count, 'is_user_liked_for_comment': is_user_liked_for_comment}
 
-        context['comment_like_data'] = d
+    #     context['comment_like_data'] = d
 
-        return context
+    #     return context
     
 
 # ===================================================================
 
-def like_for_article(request):
-    article_pk = request.POST.get('article_pk')
-    context = {
-        'user': f'{request.user.first_name}',
-    }
-    article = get_object_or_404(Article, pk=article_pk)
-    like = LikeForArticle.objects.filter(target=article, user=request.user)
+# def like_for_article(request):
+#     article_pk = request.POST.get('article_pk')
+#     context = {
+#         'user': f'{request.user.first_name}',
+#     }
+#     article = get_object_or_404(Article, pk=article_pk)
+#     like = LikeForArticle.objects.filter(target=article, user=request.user)
 
-    if like.exists():
-        like.delete()
-        context['method'] = 'delete'
-    else:
-        like.create(target=article, user=request.user)
-        context['method'] = 'create'
+#     if like.exists():
+#         like.delete()
+#         context['method'] = 'delete'
+#     else:
+#         like.create(target=article, user=request.user)
+#         context['method'] = 'create'
 
-    context['like_for_article_count'] = article.likeforarticle_set.count()
+#     context['like_for_article_count'] = article.likeforarticle_set.count()
 
-    return JsonResponse(context)
+#     return JsonResponse(context)
 
-# ===================================================================
+# # ===================================================================
 
-def like_for_comment(request):
-    comment_pk = request.POST.get('comment_pk')
-    context = {
-        'user': f'{request.user.first_name}',
-    }
-    comment = get_object_or_404(Comment, pk=comment_pk)
-    like = LikeForComment.objects.filter(target=comment, user=request.user)
-    if like.exists():
-        like.delete()
-        context['method'] = 'delete'
-    else:
-        like.create(target=comment, user=request.user)
-        context['method'] = 'create'
+# def like_for_comment(request):
+#     comment_pk = request.POST.get('comment_pk')
+#     context = {
+#         'user': f'{request.user.first_name}',
+#     }
+#     comment = get_object_or_404(Comment, pk=comment_pk)
+#     like = LikeForComment.objects.filter(target=comment, user=request.user)
+#     if like.exists():
+#         like.delete()
+#         context['method'] = 'delete'
+#     else:
+#         like.create(target=comment, user=request.user)
+#         context['method'] = 'create'
 
-    context['like_for_comment_count'] = comment.likeforcomment_set.count()
+#     context['like_for_comment_count'] = comment.likeforcomment_set.count()
 
-    return JsonResponse(context)
+#     return JsonResponse(context)
 
 # ==== 検索機能 =====================================================
 

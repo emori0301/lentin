@@ -5,7 +5,7 @@
 
 <!-- 投　稿　記　事 -->
 <div class="card m-4 border border-success border-5">
-    <div class="card-header bg-success">
+    {% comment %} <div class="card-header bg-success">
         {% if is_user_liked_for_article %}
         <button type="button" id="ajax-like-for-article" style="border:none;background:none">
           <!-- すでにイイねしている時はfasクラス -->
@@ -20,7 +20,7 @@
         <!-- イイねの数 -->
         <span id="like-for-article-count">{{ like_for_article_count }}</span>
         <span class="text-white">件のイイね</span>
-    </div>
+    </div> {% endcomment %}
 
     <h1 class="mt-3 mb-4 ">{{ article.title }}</h1>
     <a href="{{ article.image.url }}"><img alt="{{ article.title }}" src="{{ article.image.large.url }}"/></a><br/>
@@ -196,7 +196,7 @@
 {% block extrajs %}
 
 
-<script type="text/javascript">
+{% comment %} <script type="text/javascript">
   /* ポストに対するイイね */
   document.getElementById('ajax-like-for-article').addEventListener('click', e => {
     /* ログインしていない場合はログインページへ */
@@ -271,6 +271,6 @@
       });
     });
   }
-</script>
+</script> {% endcomment %}
 
 {% endblock %}
